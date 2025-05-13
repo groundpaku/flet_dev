@@ -7,19 +7,12 @@ CONTENT_HIGHT = 400
 
 def main(page: ft.Page):
 
-    def open_login(e):
-        # dlgLogin.open = True
-        page.update()
-
-    def close_login(e):
-        # dlgLogin.open = False
-        page.update()
-
+    # ログインボタン押下
     def login_auth(e):
         loginid = tfLoginid.value
         password = tfPassword.value
 
-        url = "https://api.github.com/user/"
+        url = "https://api.github.com/user/abd"
         data = {"login": loginid, "password": password}
         response = requests.post(url, data=data, auth=(loginid, password))
         statusCode = response.status_code
@@ -32,6 +25,48 @@ def main(page: ft.Page):
             txtMesssage.color = ft.Colors.RED
         page.open(snackBar)
         page.update()
+        page.go("/view2")
+    
+    # 画面1生成
+    def create_view1():
+        return ft.View("/view1", [
+            ft.AppBar(title=ft.Text("view1"),
+                      bgcolor=ft.colors.BLUE),
+            ft.TextField(value="view1"),
+            ft.ElevatedButton(
+                "Go to view2", on_click=lambda _: page.go("/view2")),
+        ])
+    
+    # 画面2生成
+    def create_view2():
+        return ft.View("/view2", [
+            ft.AppBar(title=ft.Text("view2"),
+                      bgcolor=ft.colors.RED),
+            ft.TextField(value="view2"),
+            ft.ElevatedButton(
+                "Go to view1", on_click=lambda _: page.go("/view1")),
+        ])
+    
+    def route_change(handler):
+        troute = ft.TemplateRoute(handler.route)
+        if troute.match("/view1"):
+            page.views.append(create_view1())
+        elif troute.match("/view2"):
+            page.views.append(create_view2())
+        page.update()
+
+    # ルート変更時のロジック設定
+    page.on_route_change = route_change
+
+    def view_pop(handler):
+        page.views.pop()  # 1つ前に戻る
+        page.go("/back")
+        # page.update()
+        # update() だと route が変更されない。
+        # そうなると1つ戻ってまた進むことができなくなるので go("/back") で回避。不具合？
+
+    # 戻る時のロジック設定
+    page.on_view_pop = view_pop
 
     # I/O Controls
     txtMesssage = ft.Text(size=30)
