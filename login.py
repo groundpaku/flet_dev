@@ -19,7 +19,7 @@ def main(page: ft.Page):
         loginid = tfLoginid.value
         password = tfPassword.value
 
-        url = "https://api.github.com/user"
+        url = "https://api.github.com/user/"
         data = {"login": loginid, "password": password}
         response = requests.post(url, data=data, auth=(loginid, password))
         statusCode = response.status_code
