@@ -50,7 +50,7 @@ class ChatMessage(ft.Row):
         
 
 def main(page: ft.Page):
-    page.title = 'チャット'
+    page.title = "チャット"
     
     def on_message(message: Message):
         if message.message_type == "chat_message":
@@ -65,8 +65,8 @@ def main(page: ft.Page):
     # def send_click(e):
     def send_message_click(e):
         if new_message.value != "":
-            page.pubsub.send_all(Message(user_name=page.session.get('user_name'), text=new_message.value, message_type="chat_message"))
-            new_message.value = ''
+            page.pubsub.send_all(Message(user_name=page.session.get("user_name"), text=new_message.value, message_type="chat_message"))
+            new_message.value = ""
             new_message.focus()
             page.update()
         
@@ -110,10 +110,6 @@ def main(page: ft.Page):
         on_submit = send_message_click
     )
         
-    # page.add(
-    #     chat, ft.Row(controls=[new_message, ft.ElevatedButton("Send", on_click=send_click)])
-    # )
-    
     page.add(
         ft.Container(
             content = chat,
