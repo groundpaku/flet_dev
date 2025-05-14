@@ -52,17 +52,10 @@ class ChatMessage(ft.Row):
 def main(page: ft.Page):
     page.title = 'チャット'
     
-    # chat = ft.Column()
-    # new_message = ft.TextField()
-    
     def on_message(message: Message):
         if message.message_type == "chat_message":
-            # chat.controls.append(ft.Text(f"{message.user}: {message.text}"))
             m = ChatMessage(message)
         elif message.message_type =="login_message":
-            # chat.controls.append(
-            #     ft.Text(message.text, italic=True, color=ft.colors.BLACK45, size=12)
-            # )
             m = ft.Text(message.text, italic=True, color=ft.Colors.BLACK45, size=12)
         chat.controls.append(m)
         page.update()
@@ -85,7 +78,6 @@ def main(page: ft.Page):
             join_user_name.update()
         else:
             page.session.set("user_name", join_user_name.value)
-            # alertDialog.open = False
             page.close(alertDialog)
             page.pubsub.send_all(Message(user_name=join_user_name.value, text=f"{join_user_name.value} has joined the chat.", message_type="login_message"))
             page.update()
@@ -100,7 +92,6 @@ def main(page: ft.Page):
 
     page.add(alertDialog)
     page.open(alertDialog)
-    # alertDialog.open = True
     
     chat = ft.ListView(
         expand = True,
