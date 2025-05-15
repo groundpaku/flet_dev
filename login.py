@@ -1,5 +1,6 @@
 import flet as ft
 import requests
+import json
 
 # const
 CONTENT_WIDTH = 400
@@ -12,13 +13,17 @@ def main(page: ft.Page):
         loginid = tfLoginid.value
         password = tfPassword.value
 
-        url = "https://api.github.com/user/abd"
-        data = {"login": loginid, "password": password}
-        response = requests.post(url, data=data, auth=(loginid, password))
+        url = "http://172.20.63.23/login"
+        header = {
+            "Content-Type": "application/json"
+        }
+        data = {"name": loginid}
+        response = requests.post(url, data=json.dumps(data), headers=header)
         statusCode = response.status_code
+        result = response.json()
 
-        if loginid == "hoge" and password == "hoge":
-            txtMesssage.value = f"ログイン成功！ {loginid} {password} {statusCode}"
+        if statusCode == 201:
+            txtMesssage.value = f"ログイン成功！ {result['name']} {result['address']} {statusCode}"
             txtMesssage.color = ft.Colors.GREEN
         else:
             txtMesssage.value = f"ログイン失敗！ {loginid} {password} {statusCode}"
