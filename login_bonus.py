@@ -20,19 +20,34 @@ def main(page: ft.Page):
         data = {"id": loginid}
         response = requests.post(url, data=json.dumps(data), headers=header)
         statusCode = response.status_code
-        result = response.json()
+        result_login = response.json()
 
         if statusCode == 201:
-            txtMesssage.value = f"ログイン成功！ {result['user_info']['name']} {result['user_info']['address']} {statusCode}"
-            txtMesssage.color = ft.Colors.GREEN
-            page.open(snackBar)
-            page.update()
-            page.go("/view2")
+            result_login_bonus = get_logion_bonus_info(loginid)
+            if result_login_bonus["result"]:
+                txtMesssage.value = f"ログイン成功！ {result_login['name']} {result_login['address']} {statusCode}"
+                txtMesssage.color = ft.Colors.GREEN
+                page.open(snackBar)
+                page.update()
+                page.go("/view2")
         else:
             txtMesssage.value = f"ログイン失敗！ {loginid} {password} {statusCode}"
             txtMesssage.color = ft.Colors.RED
             page.open(snackBar)
             page.update()
+    
+    # ログインボーナス情報取得
+    def get_logion_bonus_info(login_id):
+        url = "http://172.20.63.23/api/02_search_login_bonus"
+        header = {
+            "Content-Type": "application/json"
+        }
+        data = {"id": login_id}
+        response = requests.post(url, data=json.dumps(data), headers=header)
+        statusCode = response.status_code
+        result = response.json()
+
+        return result
         
     
     # 画面1生成
