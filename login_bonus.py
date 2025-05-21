@@ -109,7 +109,6 @@ def main(page: ft.Page):
         use_bonus_button.disabled = True
         page.update()
         # page.go("/view2")
-        
     
     # 画面1生成
     def create_view1():
